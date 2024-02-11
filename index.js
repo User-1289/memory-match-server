@@ -11,6 +11,13 @@ const io = new Server(http);
 app.use(cors());
 app.use(express.json());
 
+// Set up CORS headers
+app.use((req, res, next) => {
+  res.header('Access-Control-Allow-Origin', '*'); // Allow requests from any origin
+  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
+  next();
+});
+
 io.on("connect_error", (err) => {
   console.log(`connect_error due to ${err.message}`);
 });
@@ -19,8 +26,8 @@ io.on("connect_error", (err) => {
 app.get('/', (req, res) => {
   console.log('giefw');
   res.send('Hello World!'); // Send a response to the client
+});
 
-})
 io.on('connection', (socket) => {
   console.log('A user connected');
 
@@ -35,4 +42,3 @@ const port = process.env.PORT || 8000;
 http.listen(port, () => {
   console.log(`Server listening on port ${port}`);
 });
-
