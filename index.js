@@ -8,11 +8,13 @@ const { Server } = require("socket.io");
 
 const io = new Server(http);
 
+app.use(cors());
+app.use(express.json());
+
 io.on("connect_error", (err) => {
   console.log(`connect_error due to ${err.message}`);
 });
-app.use(cors());
-app.use(express.json());
+
 
 app.get('/', (req, res) => {
   console.log('giefw');
