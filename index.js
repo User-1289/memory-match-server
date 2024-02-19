@@ -10,6 +10,10 @@ const io = new Server(server,{
     origin:"http://localhost:3000",
     credentials:true
   },
+  cors:{
+    origin:"https://memory-match-multiplayer.vercel.app",
+    credentials:true
+  }
   
 });
 
