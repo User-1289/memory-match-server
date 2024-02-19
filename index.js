@@ -106,14 +106,37 @@ io.on('connection', (socket) => {
     //boardArr = updatedBoardArr
     socket.emit("sqClickUpdated", {boardArr:updatedBoardArr})
     socket.to(glbRoomId).emit("sqClickUpdated", {boardArr:updatedBoardArr})
-
   })
 
+  socket.on('sqClose', (data)=>{
+    console.log(data)
+    let updatedBoardArr = data.exisBoardInfo.slice(); // Make a copy of the existing board array
+    data.sqObj.forEach((sq) => {
+      updatedBoardArr.forEach((item, index) => {
+        if (item.id === sq.id) {
+          updatedBoardArr[index] = {
+            ...item, // Spread the existing item properties
+            dispState: false // Update the dispState
+          };
+        }
+      });
+    });
+  
+    socket.emit("sqClickUpdated", { boardArr: updatedBoardArr });
+    socket.to(glbRoomId).emit("sqClickUpdated", { boardArr: updatedBoardArr });
+  });
+  
+
+  
   socket.on("nextUser", ()=>{
     let getPlayer = swapPlayers()
     console.log(getPlayer)
     socket.emit("currPlayer", {userObj:getPlayer})
     socket.to(glbRoomId).emit("currPlayer", {userObj:getPlayer})
+  })
+
+  socket.on('scoreUpdated', (scoreData)=>{
+    socket.to(glbRoomId).emit("opponentScrUpdated", {score:scoreData.score})
   })
 });
 
