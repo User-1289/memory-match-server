@@ -6,16 +6,12 @@ const path = require('path');
 const server = http.createServer(app);
 const { Server } = require("socket.io");
 const io = new Server(server,{
-  cors:{
-    origin:"http://localhost:3000",
-    credentials:true
-  },
-  cors:{
-    origin:"https://memory-match-multiplayer.vercel.app",
-    credentials:true
+  cors: {
+    origin: ["http://localhost:3000", "https://memory-match-multiplayer.vercel.app"],
+    credentials: true
   }
-  
 });
+
 
 let animalInfo = [
   {
@@ -63,15 +59,15 @@ app.get('/', (req, res) => {
 });
 
 io.on('connection', (socket) => {
-  console.log('a user connected: id' + socket.id);
+ // console.log('a user connected: id' + socket.id);
 
   // Handle disconnection event
   socket.on('disconnect', () => {
-    console.log('A user disconnected');
+   /// console.log('A user disconnected');
   });
 
   socket.on('createGame', (data)=>{
-    console.log('going to create a new game....')
+   // console.log('going to create a new game....')
     const roomUniqueId = makeid(4);
     rooms[roomUniqueId] = {};
     socket.join(roomUniqueId);
@@ -113,7 +109,7 @@ io.on('connection', (socket) => {
   })
 
   socket.on('sqClose', (data)=>{
-    console.log(data)
+   // console.log(data)
     let updatedBoardArr = data.exisBoardInfo.slice(); // Make a copy of the existing board array
     data.sqObj.forEach((sq) => {
       updatedBoardArr.forEach((item, index) => {
@@ -134,7 +130,7 @@ io.on('connection', (socket) => {
   
   socket.on("nextUser", ()=>{
     let getPlayer = swapPlayers()
-    console.log(getPlayer)
+   // console.log(getPlayer)
     socket.emit("currPlayer", {userObj:getPlayer})
     socket.to(glbRoomId).emit("currPlayer", {userObj:getPlayer})
   })
